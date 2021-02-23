@@ -13,8 +13,8 @@ public:
 private:
 	sf::RectangleShape boxe[2], obj[2000], obj1[2000];
 	int arr[2000], arr1[2000];
-	sf::Text titles[2];
+	sf::Text titles[2], comp[2], sc[2], sit[2], iter[2];
 	sf::Font font;
-	int j, i, st,dr;
+	int j, i, st,dr, comp1, comp2, iter1, iter2;
 	bool pause;
 };

@@ -2,8 +2,8 @@
 
 Window::Window()
 {
-	width = sf::VideoMode::getDesktopMode().width;
-	height = sf::VideoMode::getDesktopMode().height;
+	width = 1366;
+	height = 768;
 	cursorHand.loadFromSystem(sf::Cursor::Hand);
 	cursorArr.loadFromSystem(sf::Cursor::Arrow);
 	cursorMove.loadFromSystem(sf::Cursor::Type::SizeAll);
