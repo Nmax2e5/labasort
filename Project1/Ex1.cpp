@@ -138,7 +138,7 @@ void Ex1::draw(sf::RenderWindow& window)
 					obj[j - 1].setPosition(obj[j - 1].getPosition().x, 20 * (wGetHeight() / 768) + ((340 - obj[j - 1].getSize().y) * (wGetHeight() / 768)));
 					int aux_nr = arr[j];
 					arr[j] = arr[j - 1];
-					arr[j - 1] = aux_nr;
+					arr[j - 1] = aux_nr;  
 					iter1++;
 				}
 				comp1++;
