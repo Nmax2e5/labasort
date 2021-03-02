@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Ex1.cpp" />
+    <ClCompile Include="Ex2.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -168,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="Ex1.h" />
+    <ClInclude Include="Ex2.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

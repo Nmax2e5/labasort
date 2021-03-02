@@ -5,6 +5,7 @@ App::App(sf::RenderWindow& window)
 	current_scene = 0;
 	scene[0] = new MainMenu(window);
 	scene[1] = new Ex1(window);
+	scene[2] = new Ex2(window);
 }
 
 App::~App()

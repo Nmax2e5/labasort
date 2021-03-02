@@ -1,7 +1,7 @@
-#include "Ex1.h"
+#include "Ex2.h"
 #include <time.h>
 
-Ex1::Ex1(sf::RenderWindow& window)
+Ex2::Ex2(sf::RenderWindow& window)
 {
 	for (int i = 0; i < 2; i++)
 	{
@@ -41,7 +41,7 @@ Ex1::Ex1(sf::RenderWindow& window)
 
 	for (int i = 0; i < 2; i++)
 	{
-		boxe[i].setSize(sf::Vector2f(wGetWidth() - 20 * (wGetWidth() / 1366), wGetHeight()/2 - 30 * (wGetHeight() / 768)));
+		boxe[i].setSize(sf::Vector2f(wGetWidth() - 20 * (wGetWidth() / 1366), wGetHeight() / 2 - 30 * (wGetHeight() / 768)));
 		boxe[i].setFillColor(sf::Color::Black);
 		boxe[i].setOutlineColor(sf::Color::White);
 		boxe[i].setOutlineThickness(5);
@@ -58,8 +58,8 @@ Ex1::Ex1(sf::RenderWindow& window)
 		titles[i].setPosition(sf::Vector2f(30 * (wGetWidth() / 1366), 10 * (wGetHeight() / 768) + (i * (wGetHeight() / 2 + 10) * (wGetHeight() / 768))));
 	}
 
-	titles[0].setString("Shaker Sort");
-	titles[1].setString("Insertion Sort");
+	titles[0].setString("Merge Sort");
+	titles[1].setString("Quick Sort");
 
 	randomizare();
 	j = 0;
@@ -72,7 +72,7 @@ Ex1::Ex1(sf::RenderWindow& window)
 	s1 = s2 = 0;
 }
 
-void Ex1::checkEvents(sf::RenderWindow& window, int* current_scene)
+void Ex2::checkEvents(sf::RenderWindow& window, int* current_scene)
 {
 	sf::Event event;
 	while (window.pollEvent(event))
@@ -102,16 +102,16 @@ void Ex1::checkEvents(sf::RenderWindow& window, int* current_scene)
 	}
 }
 
-void Ex1::draw(sf::RenderWindow& window)
+void Ex2::draw(sf::RenderWindow& window)
 {
 	if (!pause)
 	{
 		if (!s1)
-			shakersort(window);
+			mergesort(window, 0, 1325), succes(window, 0, 1325, obj);
 		s1 = 1;
 
 		if (!s2)
-			insertionsort(window);
+			quicksort(window, 0, 1324), succes(window, 0, 1325, obj1);
 		s2 = 1;
 	}
 
@@ -119,7 +119,7 @@ void Ex1::draw(sf::RenderWindow& window)
 
 }
 
-void Ex1::render(sf::RenderWindow& window)
+void Ex2::render(sf::RenderWindow& window)
 {
 	for (int i = 0; i < 2; i++)
 	{
@@ -151,7 +151,7 @@ void Ex1::render(sf::RenderWindow& window)
 	iter[1].setString(std::to_string(iter2));
 }
 
-void Ex1::succes(sf::RenderWindow& window, int st, int dr, sf::RectangleShape obj[])
+void Ex2::succes(sf::RenderWindow& window, int st, int dr, sf::RectangleShape obj[])
 {
 	for (int i = st; i < dr; i++)
 	{
@@ -175,111 +175,127 @@ void Ex1::succes(sf::RenderWindow& window, int st, int dr, sf::RectangleShape ob
 	window.display();
 }
 
-void Ex1::shakersort(sf::RenderWindow& window)
+void Ex2::mergesort(sf::RenderWindow& window, int st, int dr)
 {
-	while (st < dr)
+	if (st == dr - 1)
+		return;
+
+	int mid = (st + dr) / 2;
+
+	mergesort(window, st, mid);
+	mergesort(window, mid, dr);
+
+	int pos1 = st, pos2 = mid;
+
+	for (int i = st, pos = 0; i < dr; i++, pos++)
+	{
+		if (pos1 == mid)
+			aux[pos] = arr[pos2++], aux_obj[pos] = obj[pos2-1].getSize();
+		else if (pos2 == dr)
+			aux[pos] = arr[pos1++], aux_obj[pos] = obj[pos1 - 1].getSize();
+		else if (arr[pos1] < arr[pos2])
+			aux[pos] = arr[pos1++], aux_obj[pos] = obj[pos1 - 1].getSize();
+		else
+			aux[pos] = arr[pos2++], aux_obj[pos] = obj[pos2 - 1].getSize();
+
+		iter1++;
+	}
+
+	for (int i = st, pos = 0; i < dr; i++, pos++)
 	{
 		window.clear(sf::Color::Black);
-		for (int j = st + 1; j < dr; j++)
-		{
-			if (arr[j] < arr[j - 1])
-			{
-				sf::Vector2f aux = obj[j].getSize();
-				obj[j].setSize(obj[j - 1].getSize());
-				obj[j].setPosition(obj[j].getPosition().x, 20 * (wGetHeight() / 768) + ((340 - obj[j].getSize().y) * (wGetHeight() / 768)));
-				obj[j - 1].setSize(aux);
-				obj[j - 1].setPosition(obj[j - 1].getPosition().x, 20 * (wGetHeight() / 768) + ((340 - obj[j - 1].getSize().y) * (wGetHeight() / 768)));
-				int aux_nr = arr[j];
-				arr[j] = arr[j - 1];
-				arr[j - 1] = aux_nr;
-				comp1++;
-			}
-			iter1++;
-		}
-		dr--;
 
+		arr[i] = aux[pos];
+		obj[i].setSize(aux_obj[pos]);
+		obj[i].setPosition(obj[i].getPosition().x, 20 * (wGetHeight() / 768) + ((340 - obj[i].getSize().y) * (wGetHeight() / 768)));
+		iter1++;
+		comp1++;
+		
 		render(window);
-		window.display();
-
-
-		window.clear(sf::Color::Black);
-
-		for (int j = dr - 1; j >= st; j--)
-		{
-			if (arr[j] < arr[j - 1])
-			{
-				sf::Vector2f aux = obj[j].getSize();
-				obj[j].setSize(obj[j - 1].getSize());
-				obj[j].setPosition(obj[j].getPosition().x, 20 * (wGetHeight() / 768) + ((340 - obj[j].getSize().y) * (wGetHeight() / 768)));
-				obj[j - 1].setSize(aux);
-				obj[j - 1].setPosition(obj[j - 1].getPosition().x, 20 * (wGetHeight() / 768) + ((340 - obj[j - 1].getSize().y) * (wGetHeight() / 768)));
-				int aux_nr = arr[j];
-				arr[j] = arr[j - 1];
-				arr[j - 1] = aux_nr;
-				comp1++;
-			}
-			iter1++;
-		}
-		st++;
-
-		render(window);
-
 		window.display();
 	}
 
-	succes(window, 0, 1325, obj);
+	/*window.clear(sf::Color::Black);
+	render(window);
+	window.display();*/
 }
 
-void Ex1::insertionsort(sf::RenderWindow& window)
+void Ex2::quicksort(sf::RenderWindow& window, int st, int dr)
 {
-	while (i < 1325)
+	if (st < dr)
 	{
-		window.clear(sf::Color::Black);
+		
+		int pivot = arr1[dr];
+		int i = st - 1;
 
-		int cur = arr1[i];
-		sf::Vector2f aux = obj1[i].getSize();
-		int j = i - 1;
-
-		while (j >= 0 && arr1[j] > cur)
+		for (int j = st; j <= dr - 1; j++)
 		{
-			obj1[j + 1].setSize(obj1[j].getSize());
-			obj1[j + 1].setPosition(obj1[j + 1].getPosition().x, 20 * (wGetHeight() / 768) + ((340 - obj1[j + 1].getSize().y) * (wGetHeight() / 768)) + ((wGetHeight() / 768) * (wGetHeight() / 2)) + ((wGetHeight() / 768) * 10));
-			arr1[j + 1] = arr1[j];
-			j--;
+			window.clear(sf::Color::Black);
+
+			if (arr1[j] <= pivot)
+			{
+				i++;
+				int auxx = arr1[j];
+				arr1[j] = arr1[i];
+				arr1[i] = auxx;
+
+				sf::Vector2f aux = obj1[j].getSize();
+				obj1[j].setSize(obj1[i].getSize());
+				obj1[j].setPosition(obj1[j].getPosition().x, 20 * (wGetHeight() / 768) + ((340 - obj1[j].getSize().y) * (wGetHeight() / 768)) + ((wGetHeight() / 768) * (wGetHeight() / 2)) + ((wGetHeight() / 768) * 10));
+				obj1[i].setSize(aux);
+				obj1[i].setPosition(obj1[i].getPosition().x, 20 * (wGetHeight() / 768) + ((340 - obj1[i].getSize().y) * (wGetHeight() / 768)) + ((wGetHeight() / 768) * (wGetHeight() / 2)) + ((wGetHeight() / 768) * 10));
+				comp2++;
+			}
 			iter2++;
-			comp2++;
+
+			render(window);
+			window.display();
 		}
 
-		obj1[j + 1].setSize(aux);
-		obj1[j + 1].setPosition(obj1[j + 1].getPosition().x, 20 * (wGetHeight() / 768) + ((340 - obj1[j + 1].getSize().y) * (wGetHeight() / 768)) + ((wGetHeight() / 768) * (wGetHeight() / 2)) + ((wGetHeight() / 768) * 10));
-		arr1[j + 1] = cur;
+		window.clear(sf::Color::Black);
+
 		i++;
+		int auxx = arr1[i];
+		arr1[i] = arr1[dr];
+		arr1[dr] = auxx;
+
+		sf::Vector2f aux = obj1[i].getSize();
+		obj1[i].setSize(obj1[dr].getSize());
+		obj1[i].setPosition(obj1[i].getPosition().x, 20 * (wGetHeight() / 768) + ((340 - obj1[i].getSize().y) * (wGetHeight() / 768)) + ((wGetHeight() / 768) * (wGetHeight() / 2)) + ((wGetHeight() / 768) * 10));
+		obj1[dr].setSize(aux);
+		obj1[dr].setPosition(obj1[dr].getPosition().x, 20 * (wGetHeight() / 768) + ((340 - obj1[dr].getSize().y) * (wGetHeight() / 768)) + ((wGetHeight() / 768) * (wGetHeight() / 2)) + ((wGetHeight() / 768) * 10));
 		comp2++;
 
 		render(window);
-
 		window.display();
+
+		/*window.clear(sf::Color::Black);
+		render(window);
+		window.display();*/
+
+		quicksort(window, st, i - 1);
+		quicksort(window, i + 1, dr);
 	}
-	succes(window, 0, 1325, obj1);
 }
 
-void Ex1::checkHover(sf::RenderWindow& window)
+void Ex2::checkHover(sf::RenderWindow& window)
 {
 
 }
 
-void Ex1::checkClick(sf::RenderWindow& window, int* current_scene)
+void Ex2::checkClick(sf::RenderWindow& window, int* current_scene)
 {
 
 }
 
-void Ex1::randomizare()
+void Ex2::randomizare()
 {
 	srand(time(NULL));
 
 	for (int i = 0; i < 1325; i++)
 	{
-		arr[i] = rand() % 300 +1;
+		arr[i] = rand() % 300 + 1;
+		//arr[i] = 100;
 		obj[i].setSize(sf::Vector2f(1, arr[i] * (wGetHeight() / 768)));
 		obj[i].setFillColor(sf::Color::White);
 		obj[i].setScale(wGetWidth() / 1366, wGetHeight() / 768);

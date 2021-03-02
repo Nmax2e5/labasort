@@ -32,7 +32,7 @@ MainMenu::MainMenu(sf::RenderWindow& window)
 	}
 
 	titles[0].setString("Varianta 7");
-	titles[1].setString("Varianta 14");
+	titles[1].setString("Varianta 15");
 
 	selected = 0;
 	buttons[0].setFillColor(sf::Color::Green);
@@ -83,6 +83,10 @@ void MainMenu::checkEvents(sf::RenderWindow& window, int* current_scene)
 				if (selected == 0)
 				{
 					*current_scene = 1;
+				} 
+				else if(selected == 1)
+				{
+					*current_scene = 2;
 				}
 			}
 			break;

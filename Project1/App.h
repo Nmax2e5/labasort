@@ -1,7 +1,7 @@
 #pragma once
 #include "MainMenu.h"
 #include "Ex1.h"
-//#include "Ex2.h"
+#include "Ex2.h"
 
 class App
 {
